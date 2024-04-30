@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.1
+-- version 5.2.0
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 25-04-2024 a las 22:18:34
--- Versión del servidor: 10.4.32-MariaDB
--- Versión de PHP: 8.2.12
+-- Tiempo de generación: 30-04-2024 a las 07:12:06
+-- Versión del servidor: 10.4.27-MariaDB
+-- Versión de PHP: 7.4.33
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `prestamos`
+-- Base de datos: `pamela-proyecto`
 --
 
 -- --------------------------------------------------------
@@ -39,7 +39,7 @@ CREATE TABLE `administrador` (
 --
 
 INSERT INTO `administrador` (`admin_id`, `username`, `password`, `email`) VALUES
-(1, 'admin1', 'password1', 'admin1@example.com'),
+(1, 'admin', 'admin', 'admin1@example.com'),
 (2, 'admin2', 'password2', 'admin2@example.com');
 
 -- --------------------------------------------------------
@@ -120,6 +120,9 @@ INSERT INTO `distrito` (`district_id`, `district_name`, `province_id`) VALUES
 CREATE TABLE `inversionista` (
   `investor_id` int(11) NOT NULL,
   `admin_id` int(11) DEFAULT NULL,
+  `district_id` int(11) NOT NULL,
+  `province_id` int(11) NOT NULL,
+  `department_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL
@@ -129,9 +132,11 @@ CREATE TABLE `inversionista` (
 -- Volcado de datos para la tabla `inversionista`
 --
 
-INSERT INTO `inversionista` (`investor_id`, `admin_id`, `username`, `password`, `email`) VALUES
-(1, 1, 'inv1', 'password1', 'inv1@example.com'),
-(2, 2, 'inv2', 'password2', 'inv2@example.com');
+INSERT INTO `inversionista` (`investor_id`, `admin_id`, `district_id`, `province_id`, `department_id`, `username`, `password`, `email`) VALUES
+(1, 1, 1, 2, 1, 'inv1', 'password1', 'inv1@example.com'),
+(2, 1, 1, 1, 1, 'inv2', 'password2', 'inv2@example.com'),
+(3, 1, 1, 1, 1, 'fanab', 'Pa$$w0rd!', 'menalufy@mailinator.com'),
+(4, 1, 47, 6, 1, 'fysacyvu', 'Pa$$w0rd!', 'cytedebo@mailinator.com');
 
 -- --------------------------------------------------------
 
@@ -195,10 +200,10 @@ CREATE TABLE `prestamo` (
 --
 
 INSERT INTO `prestamo` (`loan_id`, `borrower_id`, `loan_amount`, `loan_date`) VALUES
-(1, 1, 1500.00, '2024-04-20'),
-(2, 2, 2500.00, '2024-04-21'),
-(3, 1, 1800.00, '2024-04-22'),
-(4, 2, 3000.00, '2024-04-23');
+(1, 1, '1500.00', '2024-04-20'),
+(2, 2, '2500.00', '2024-04-21'),
+(3, 1, '1800.00', '2024-04-22'),
+(4, 2, '3000.00', '2024-04-23');
 
 -- --------------------------------------------------------
 
@@ -222,8 +227,8 @@ CREATE TABLE `prestatario` (
 --
 
 INSERT INTO `prestatario` (`borrower_id`, `lender_id`, `username`, `password`, `email`, `district_id`, `loan_amount`, `loan_date`) VALUES
-(1, 1, 'prestatario1', 'password1', 'prestatario1@example.com', 1, 1000.00, '2024-04-25'),
-(2, 2, 'prestatario2', 'password2', 'prestatario2@example.com', 2, 2000.00, '2024-04-26');
+(1, 1, 'prestatario1', 'password1', 'prestatario1@example.com', 1, '1000.00', '2024-04-25'),
+(2, 2, 'prestatario2', 'password2', 'prestatario2@example.com', 2, '2000.00', '2024-04-26');
 
 -- --------------------------------------------------------
 
@@ -280,7 +285,10 @@ ALTER TABLE `distrito`
 --
 ALTER TABLE `inversionista`
   ADD PRIMARY KEY (`investor_id`),
-  ADD KEY `admin_id` (`admin_id`);
+  ADD KEY `admin_id` (`admin_id`),
+  ADD KEY `district_id` (`district_id`),
+  ADD KEY `province_id` (`province_id`),
+  ADD KEY `department_id` (`department_id`);
 
 --
 -- Indices de la tabla `jefe_prestamista`
@@ -344,7 +352,7 @@ ALTER TABLE `distrito`
 -- AUTO_INCREMENT de la tabla `inversionista`
 --
 ALTER TABLE `inversionista`
-  MODIFY `investor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `investor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `jefe_prestamista`

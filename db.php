@@ -3,7 +3,7 @@
 $servername = "localhost"; // Cambia esto si tu servidor de base de datos está en otro lugar
 $username = "root";
 $password = "";
-$database = "prestamos"; // Nombre de tu base de datos
+$database = "pamela-proyecto"; // Nombre de tu base de datos
 
 // Crear la conexión
 $conn = new mysqli($servername, $username, $password, $database);
