@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 30-04-2024 a las 07:12:06
+-- Tiempo de generación: 01-05-2024 a las 07:32:38
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 7.4.33
 
@@ -125,18 +125,20 @@ CREATE TABLE `inversionista` (
   `department_id` int(11) NOT NULL,
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
-  `email` varchar(100) NOT NULL
+  `email` varchar(100) NOT NULL,
+  `state` tinyint(4) NOT NULL DEFAULT 1
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `inversionista`
 --
 
-INSERT INTO `inversionista` (`investor_id`, `admin_id`, `district_id`, `province_id`, `department_id`, `username`, `password`, `email`) VALUES
-(1, 1, 1, 2, 1, 'inv1', 'password1', 'inv1@example.com'),
-(2, 1, 1, 1, 1, 'inv2', 'password2', 'inv2@example.com'),
-(3, 1, 1, 1, 1, 'fanab', 'Pa$$w0rd!', 'menalufy@mailinator.com'),
-(4, 1, 47, 6, 1, 'fysacyvu', 'Pa$$w0rd!', 'cytedebo@mailinator.com');
+INSERT INTO `inversionista` (`investor_id`, `admin_id`, `district_id`, `province_id`, `department_id`, `username`, `password`, `email`, `state`) VALUES
+(1, 1, 59, 10, 1, 'jefe', 'Pa$$w0rd!', 'quqerit@mailinator.com', 1),
+(2, 1, 1, 1, 1, 'inv', 'inv', 'inv2@example.com', 1),
+(3, 1, 54, 8, 1, 'fanab', 'Pa$$w0rd!', 'menalufy@mailinator.com', 1),
+(4, 1, 47, 6, 1, 'fysacyvu', 'Pa$$w0rd!', 'cytedebo@mailinator.com', 0),
+(5, 1, 29, 10, 1, 'mukaluxy', 'Pa$$w0rd!', 'bifimohaj@mailinator.com', 1);
 
 -- --------------------------------------------------------
 
@@ -147,6 +149,12 @@ INSERT INTO `inversionista` (`investor_id`, `admin_id`, `district_id`, `province
 CREATE TABLE `jefe_prestamista` (
   `leader_id` int(11) NOT NULL,
   `investor_id` int(11) DEFAULT NULL,
+  `phone` varchar(100) NOT NULL,
+  `dni` varchar(10) NOT NULL,
+  `district_id` int(11) NOT NULL,
+  `province_id` int(11) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  `state` tinyint(4) NOT NULL DEFAULT 1,
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL
@@ -156,9 +164,11 @@ CREATE TABLE `jefe_prestamista` (
 -- Volcado de datos para la tabla `jefe_prestamista`
 --
 
-INSERT INTO `jefe_prestamista` (`leader_id`, `investor_id`, `username`, `password`, `email`) VALUES
-(1, 1, 'jefe1', 'password1', 'jefe1@example.com'),
-(2, 2, 'jefe2', 'password2', 'jefe2@example.com');
+INSERT INTO `jefe_prestamista` (`leader_id`, `investor_id`, `phone`, `dni`, `district_id`, `province_id`, `department_id`, `state`, `username`, `password`, `email`) VALUES
+(1, 1, '', '', 0, 2, 1, 1, 'jefe', 'jefe', 'jefe1@example.com'),
+(2, 2, '', '', 35, 2, 1, 1, 'jefe', 'jefe2', 'jefe2@example.com'),
+(3, 1, '+1 (566) 111-8205', 'Autem sint', 35, 2, 1, 0, 'gedony', 'Pa$$w0rd!', 'tawydob@mailinator.com'),
+(4, 1, '+1 (322) 228-4968', 'Laboris pa', 59, 10, 1, 0, 'hiii', 'Pa$$w0rd!', 'quqerit@mailinator.com');
 
 -- --------------------------------------------------------
 
@@ -169,6 +179,12 @@ INSERT INTO `jefe_prestamista` (`leader_id`, `investor_id`, `username`, `passwor
 CREATE TABLE `prestamista` (
   `lender_id` int(11) NOT NULL,
   `leader_id` int(11) DEFAULT NULL,
+  `phone` varchar(100) NOT NULL,
+  `dni` varchar(100) NOT NULL,
+  `district_id` int(11) NOT NULL,
+  `province_id` int(11) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  `state` tinyint(4) NOT NULL DEFAULT 1,
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL
@@ -178,9 +194,11 @@ CREATE TABLE `prestamista` (
 -- Volcado de datos para la tabla `prestamista`
 --
 
-INSERT INTO `prestamista` (`lender_id`, `leader_id`, `username`, `password`, `email`) VALUES
-(1, 1, 'prestamista1', 'password1', 'prestamista1@example.com'),
-(2, 2, 'prestamista2', 'password2', 'prestamista2@example.com');
+INSERT INTO `prestamista` (`lender_id`, `leader_id`, `phone`, `dni`, `district_id`, `province_id`, `department_id`, `state`, `username`, `password`, `email`) VALUES
+(1, 1, '', '', 1, 1, 1, 1, 'prestamista', 'prestamista', 'prestamista1@example.com'),
+(2, 2, '', '', 1, 1, 1, 1, 'prestamista2', 'password2', 'prestamista2@example.com'),
+(3, 1, '+1 (627) 692-6578', 'Aspernatur molestiae', 38, 3, 1, 1, 'zubeq', 'Pa$$w0rd!', 'zebyxavuvy@mailinator.com'),
+(4, 1, '+1 (165) 419-4106', 'Et eiusmod ut animi', 59, 10, 1, 0, 'miguelxd', 'Pa$$w0rd!', 'jibudazymu@mailinator.com');
 
 -- --------------------------------------------------------
 
@@ -214,6 +232,11 @@ INSERT INTO `prestamo` (`loan_id`, `borrower_id`, `loan_amount`, `loan_date`) VA
 CREATE TABLE `prestatario` (
   `borrower_id` int(11) NOT NULL,
   `lender_id` int(11) DEFAULT NULL,
+  `phone` varchar(100) NOT NULL,
+  `dni` varchar(100) NOT NULL,
+  `province_id` int(11) NOT NULL,
+  `department_id` int(11) NOT NULL,
+  `state` tinyint(4) NOT NULL DEFAULT 1,
   `username` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `email` varchar(100) NOT NULL,
@@ -226,9 +249,13 @@ CREATE TABLE `prestatario` (
 -- Volcado de datos para la tabla `prestatario`
 --
 
-INSERT INTO `prestatario` (`borrower_id`, `lender_id`, `username`, `password`, `email`, `district_id`, `loan_amount`, `loan_date`) VALUES
-(1, 1, 'prestatario1', 'password1', 'prestatario1@example.com', 1, '1000.00', '2024-04-25'),
-(2, 2, 'prestatario2', 'password2', 'prestatario2@example.com', 2, '2000.00', '2024-04-26');
+INSERT INTO `prestatario` (`borrower_id`, `lender_id`, `phone`, `dni`, `province_id`, `department_id`, `state`, `username`, `password`, `email`, `district_id`, `loan_amount`, `loan_date`) VALUES
+(1, 1, '', '', 0, 0, 1, 'prestatario1', 'password1', 'prestatario1@example.com', 1, '1000.00', '2024-04-25'),
+(2, 2, '', '', 0, 0, 1, 'prestatario2', 'password2', 'prestatario2@example.com', 2, '2000.00', '2024-04-26'),
+(3, 1, '+1 (842) 883-7326', 'Eu quo non aspernatu', 2, 1, 1, 'holis', 'Pa$$w0rd!', 'sijaxd@mailinator.com', 34, NULL, NULL),
+(4, 1, '+1 (583) 964-2195', 'Inventore enim illum', 7, 1, 1, 'zuwivukuf', 'Pa$$w0rd!', 'gocakunov@mailinator.com', 49, NULL, NULL),
+(5, 1, '+1 (209) 995-1196', 'Aut dolore autem sed', 4, 1, 0, 'qevawi', 'Pa$$w0rd!', 'rohicevin@mailinator.com', 40, NULL, NULL),
+(6, 1, '+1 (408) 934-5855', 'Excepturi quis nesci', 1, 1, 1, 'prestatario', 'prestatario', 'digamehyzi@mailinator.com', 2, NULL, NULL);
 
 -- --------------------------------------------------------
 
@@ -352,19 +379,19 @@ ALTER TABLE `distrito`
 -- AUTO_INCREMENT de la tabla `inversionista`
 --
 ALTER TABLE `inversionista`
-  MODIFY `investor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `investor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `jefe_prestamista`
 --
 ALTER TABLE `jefe_prestamista`
-  MODIFY `leader_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `leader_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `prestamista`
 --
 ALTER TABLE `prestamista`
-  MODIFY `lender_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `lender_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `prestamo`
@@ -376,7 +403,7 @@ ALTER TABLE `prestamo`
 -- AUTO_INCREMENT de la tabla `prestatario`
 --
 ALTER TABLE `prestatario`
-  MODIFY `borrower_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `borrower_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `provincia`

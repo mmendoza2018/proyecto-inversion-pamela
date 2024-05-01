@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['lender_id'])) {
+if (!isset($_SESSION['borrower_id'])) {
     header("Location: login.php");
     exit;
 }

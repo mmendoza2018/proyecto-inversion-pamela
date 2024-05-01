@@ -1,44 +1,53 @@
 <?php
 session_start();
 
-if (isset($_SESSION['borrower_id'])) {
-    header("Location: dashboard_borrower.php");
+if (!isset($_SESSION['borrower_id'])) {
+    header("Location: login.php");
     exit;
 }
 
-include('db.php');
-
-if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $email = $_POST['email'];
-
-    $query = "INSERT INTO prestatario (username, password, email) VALUES ('$username', '$password', '$email')";
-    if ($conn->query($query) === TRUE) {
-        header("Location: login.php");
-        exit;
-    } else {
-        echo "Error: " . $query . "<br>" . $conn->error;
-    }
-}
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
-    <title>Registro de Prestatario</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Inversionista</title>
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        /* Estilo adicional para centrar la tabla */
+        .center-table {
+            margin: 0 auto;
+            width: 80%;
+        }
+    </style>
 </head>
+
 <body>
-    <h2>Registro de Prestatario</h2>
-    <form method="post">
-        <label>Usuario:</label><br>
-        <input type="text" name="username" required><br><br>
-        <label>Contraseña:</label><br>
-        <input type="password" name="password" required><br><br>
-        <label>Email:</label><br>
-        <input type="email" name="email" required><br><br>
-        <button type="submit">Registrarse</button>
-    </form>
+    <div class="container mt-4">
+        <h1>¡Bienvenido al Dashboard, Prestamista!</h1>
+        <p>Aquí puedes ver información relacionada con tu cuenta y otras funcionalidades disponibles.</p>
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <a href="prestamistaRegister.php" class="btn btn-primary btn-block">Solicitud de prestamos</a>
+            </div>
+            <div style="width: 100%; height: 60vh; background-color: grey;" class="mt-5">
+
+            </div>
+
+            <!-- Puedes agregar más opciones según las funcionalidades de tu sistema -->
+        </div>
+      
+        <a href="logout.php" class="btn btn-danger">Cerrar Sesión</a>
+    </div>
+
+    <!-- jQuery y Bootstrap JS (Necesario para que funcione Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/global.js"></script>
 </body>
+
 </html>

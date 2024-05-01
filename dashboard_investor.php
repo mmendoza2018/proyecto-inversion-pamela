@@ -10,9 +10,11 @@ if (!isset($_SESSION['investor_id'])) {
 include('db.php');
 
 // Consultar los inversionistas registrados asociados al inversionista actual
-$query = "SELECT * FROM jefe_prestamista WHERE investor_id = ?";
+$query = "SELECT * FROM jefe_prestamista jp INNER JOIN distrito dis ON jp.district_id = dis.district_id ";
+$query .= "INNER JOIN departamento dep ON jp.department_id = dep.department_id ";
+$query .= "INNER JOIN provincia pro ON jp.province_id = pro.province_id";
+
 $stmt = $conn->prepare($query);
-$stmt->bind_param("i", $_SESSION['investor_id']);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -22,6 +24,7 @@ $inversionistas = $result->fetch_all(MYSQLI_ASSOC);
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,15 +39,16 @@ $inversionistas = $result->fetch_all(MYSQLI_ASSOC);
         }
     </style>
 </head>
+
 <body>
     <div class="container mt-4">
         <h1>¡Bienvenido al Dashboard, Inversionista!</h1>
         <p>Aquí puedes ver información relacionada con tu cuenta y otras funcionalidades disponibles.</p>
         <div class="row mb-4">
             <div class="col-md-4">
-                <a href="inversionistaRegister.php" class="btn btn-primary btn-block">Agregar Usuario</a>
+                <a href="inversionistaRegister.php" class="btn btn-primary btn-block">Agregar jefe de prestamista</a>
             </div>
-            
+
             <!-- Puedes agregar más opciones según las funcionalidades de tu sistema -->
         </div>
         <div class="row">
@@ -63,17 +67,17 @@ $inversionistas = $result->fetch_all(MYSQLI_ASSOC);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($inversionistas as $inversionista) : ?>
+                        <?php foreach ($inversionistas as $inversionista) : if($inversionista['state'] == 0) continue; ?>
                             <tr>
-                                <td><?php echo $inversionista['investor_id']; ?></td>
+                                <td><?php echo $inversionista['leader_id']; ?></td>
                                 <td><?php echo $inversionista['username']; ?></td>
                                 <td><?php echo $inversionista['email']; ?></td>
-                                <td><?php echo obtenerNombreDistrito($conn, $inversionista['district_id']); ?></td>
-                                <td><?php echo obtenerNombreProvincia($conn, $inversionista['province_id']); ?></td>
-                                <td><?php echo obtenerNombreDepartamento($conn, $inversionista['department_id']); ?></td>
+                                <td><?php echo $inversionista["district_name"]; ?></td>
+                                <td><?php echo $inversionista["province_name"]; ?></td>
+                                <td><?php echo $inversionista["department_name"]; ?></td>
                                 <td>
-                                    <a href="edit_user.php?id=<?php echo $inversionista['investor_id']; ?>" class="btn btn-primary btn-sm">Editar</a>
-                                    <a href="delete_user.php?id=<?php echo $inversionista['investor_id']; ?>" class="btn btn-danger btn-sm">Eliminar</a>
+                                    <a href="#" onclick="obtenerJefePrestamista('<?= $inversionista['leader_id']; ?>')" data-toggle="modal" data-target="#editarJefePrestamista" class="btn btn-primary btn-sm">Editar</a>
+                                    <a href="#" onclick="eliminaJefePrestamista('<?= $inversionista['leader_id']; ?>')" class="btn btn-danger btn-sm">Eliminar</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -84,8 +88,88 @@ $inversionistas = $result->fetch_all(MYSQLI_ASSOC);
         <a href="logout.php" class="btn btn-danger">Cerrar Sesión</a>
     </div>
 
+
+    <!-- Modal -->
+    <div class="modal fade" id="editarJefePrestamista" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Actualizar</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formActJefePrestamista">
+                        <div class="form-group">
+                            <label for="username">Nombre de Usuario:</label>
+                            <input type="text" id="username" name="username" class="form-control" required>
+                            <input type="hidden" id="leader_id" name="leader_id">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Contraseña:</label>
+                            <input type="password" id="password" name="password" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Correo Electrónico:</label>
+                            <input type="email" id="email" name="email" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">Telefono:</label>
+                            <input type="text" id="phone" name="phone" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="dni">DNI:</label>
+                            <input type="text" id="dni" name="dni" class="form-control" required>
+                        </div>
+
+                        <!-- Puedes agregar más campos según tus necesidades -->
+                        <div class="form-group">
+                            <label for="department">Departamento:</label>
+                            <select id="department_id" name="department_id" class="form-control" required>
+                                <option value="1" selected>La Libertad</option>
+                                <!-- Opción fija para mostrar el departamento -->
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="province">Provincia:</label>
+                            <select id="province_id" name="province_id" class="form-control" required>
+                                <option value="">Seleccione una provincia</option>
+                                <!-- Aquí se generará dinámicamente las opciones de provincia -->
+                                <?php
+                                // Consultar las provincias
+                                $query_provincias = "SELECT * FROM provincia";
+                                $result_provincias = $conn->query($query_provincias);
+
+                                // Generar opciones para provincias
+                                while ($row_provincia = $result_provincias->fetch_assoc()) {
+                                    echo "<option value='{$row_provincia['province_id']}'>{$row_provincia['province_name']}</option>";
+                                }
+                                ?>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="district">Distrito:</label>
+                            <select id="district_id" name="district_id" class="form-control" required>
+                                <option value="">Seleccione un distrito</option>
+                                <!-- Aquí se cargarán dinámicamente las opciones de distrito según la provincia seleccionada -->
+                            </select>
+                        </div>
+
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerra</button>
+                    <button type="button" class="btn btn-primary" onclick="actualizaJefePrestamista()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- jQuery y Bootstrap JS (Necesario para que funcione Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/global.js"></script>
 </body>
+
 </html>

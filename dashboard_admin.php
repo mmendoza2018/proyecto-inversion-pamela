@@ -104,7 +104,7 @@ $inversionistas = $result->fetch_all(MYSQLI_ASSOC);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($inversionistas as $inversionista) : ?>
+                        <?php foreach ($inversionistas as $inversionista) : if($inversionista['state'] == 0) continue; ?>
                             <tr>
                                 <td><?php echo $inversionista['investor_id']; ?></td>
                                 <td><?php echo $inversionista['username']; ?></td>
@@ -114,7 +114,7 @@ $inversionistas = $result->fetch_all(MYSQLI_ASSOC);
                                 <td><?php echo obtenerNombreDepartamento($conn, $inversionista['department_id']); ?></td>
                                 <td>
                                     <a href="#" onclick="obtenerInversionista('<?= $inversionista['investor_id']; ?>')" data-toggle="modal" data-target="#editarInservionista" class="btn btn-primary btn-sm">Editar</a>
-                                    <a href="delete_user.php?id=<?php echo $inversionista['investor_id']; ?>" class="btn btn-danger btn-sm">Eliminar</a>
+                                    <a href="#" onclick="eliminaInversionista('<?= $inversionista['investor_id']; ?>')"  class="btn btn-danger btn-sm">Eliminar</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -188,8 +188,8 @@ $inversionistas = $result->fetch_all(MYSQLI_ASSOC);
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerra</button>
+                    <button type="button" class="btn btn-primary" onclick="actualizaInversionista()">Guardar</button>
                 </div>
             </div>
         </div>

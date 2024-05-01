@@ -12,32 +12,22 @@ include('db.php');
 // Obtener el ID del inversionista actual
 $investor_id = $_SESSION['investor_id'];
 
-// Consultar los inversionistas asociados al inversionista actual
-$query = "SELECT * FROM jefe_prestamista WHERE investor_id = ?";
-$stmt = $conn->prepare($query);
-$stmt->bind_param("i", $investor_id);
-$stmt->execute();
-$result = $stmt->get_result();
-
-// Procesar los resultados
-$inversionistas = array();
-while ($row = $result->fetch_assoc()) {
-    $inversionistas[] = $row;
-}
-
 // Procesar el formulario de registro del inversionista
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
        // Recoger los datos del formulario
 $username = $_POST['username'];
 $password = $_POST['password'];
 $email = $_POST['email'];
+$phone = $_POST['phone'];
+$dni = $_POST['dni'];
 $district_id = $_POST['district'];
 $province_id = $_POST['province'];
 $department_id = $_POST['department'];
+
     // Insertar el nuevo inversionista en la base de datos
-    $query = "INSERT INTO jefe_prestamista (investor_id, username, password, email, district_id, province_id, department_id) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO jefe_prestamista (investor_id, username, password, email, district_id, province_id, department_id, phone, dni) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("isss", $investor_id, $username, $password, $email, $district_id, $province_id, $department_id);
+    $stmt->bind_param("isssiiiss", $investor_id, $username, $password, $email, $district_id, $province_id, $department_id, $phone, $dni);
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {
@@ -88,11 +78,20 @@ $department_id = $_POST['department'];
                 <label for="email">Correo Electrónico:</label>
                 <input type="email" id="email" name="email" class="form-control" required>
             </div>
+            <div class="form-group">
+                <label for="phone">Telefono:</label>
+                <input type="text" id="phone" name="phone" class="form-control" required>
+            </div>
+            <div class="form-group">
+                <label for="dni">DNI:</label>
+                <input type="text" id="dni" name="dni" class="form-control" required>
+            </div>
+            
 
             <!-- Puedes agregar más campos según tus necesidades -->
             <div class="form-group">
                 <label for="department">Departamento:</label>
-                <select id="department" name="department" class="form-control" required disabled>
+                <select id="department" name="department" class="form-control" required>
                     <option value="1" selected>La Libertad</option>
                     <!-- Opción fija para mostrar el departamento -->
                 </select>

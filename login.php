@@ -55,6 +55,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         exit();
     }
 
+     // Consulta para verificar las credenciales del prestatario
+     $query_prestatario = "SELECT * FROM prestatario WHERE username='$username' AND password='$password'";
+     $result_prestatario = $conn->query($query_prestatario);
+ 
+     if ($result_prestatario->num_rows == 1) {
+         // Usuario válido como prestamista
+         $row_prestatario = $result_prestatario->fetch_assoc();
+         $_SESSION['borrower_id'] = $row_prestatario['borrower_id']; // Guardar el ID del prestamista en la sesión
+         header("Location: dashboard_prestatario.php"); // Redirigir al panel de control del prestamista
+         exit();
+     }
+ 
+
     // Credenciales inválidas para todos los roles
     $error = "Nombre de usuario o contraseña incorrectos";
 }

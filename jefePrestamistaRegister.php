@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-if (!isset($_SESSION['lender_id'])) {
+if (!isset($_SESSION['leader_id'])) {
     header("Location: login.php");
     exit;
 }
@@ -10,7 +10,7 @@ if (!isset($_SESSION['lender_id'])) {
 include('db.php');
 
 // Obtener el ID del inversionista actual
-$lender_id = $_SESSION['lender_id'];
+$leader_id = $_SESSION['leader_id'];
 
 // Procesar el formulario de registro del inversionista
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -25,14 +25,14 @@ $province_id = $_POST['province'];
 $department_id = $_POST['department'];
 
     // Insertar el nuevo inversionista en la base de datos
-    $query = "INSERT INTO prestatario (lender_id, username, password, email, district_id, province_id, department_id, phone, dni) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    $query = "INSERT INTO prestamista (leader_id, username, password, email, district_id, province_id, department_id, phone, dni) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmt = $conn->prepare($query);
-    $stmt->bind_param("isssiiiss", $lender_id, $username, $password, $email, $district_id, $province_id, $department_id, $phone, $dni);
+    $stmt->bind_param("isssiiiss", $leader_id, $username, $password, $email, $district_id, $province_id, $department_id, $phone, $dni);
     $stmt->execute();
 
     if ($stmt->affected_rows > 0) {
         // Inversionista registrado exitosamente
-        header("Location: dashboard_prestamista.php");
+        header("Location: dashboard_jefe.php");
         exit;
     } else {
         // Error al registrar al inversionista
@@ -46,7 +46,7 @@ $department_id = $_POST['department'];
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registro de Prestatarios</title>
+    <title>Registro de prestamistas</title>
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <style>
@@ -64,7 +64,7 @@ $department_id = $_POST['department'];
 </head>
 <body>
     <div class="container">
-        <h2 class="mb-4">Registro de Nuevo Prestatarios</h2>
+        <h2 class="mb-4">Registro de Nuevo Prestamista</h2>
         <form method="post">
             <div class="form-group">
                 <label for="username">Nombre de Usuario:</label>
