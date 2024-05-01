@@ -128,7 +128,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">Agregar Inversionista</button>
+            <button type="submit" class="btn btn-primary">Agregar</button>
 
         </form>
         <?php if (isset($error)) : ?>

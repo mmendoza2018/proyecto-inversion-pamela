@@ -121,7 +121,7 @@ $department_id = $_POST['department'];
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-primary">Registrar Inversionista</button>
+            <button type="submit" class="btn btn-primary">Registrar</button>
         </form>
         <?php if (isset($error)) : ?>
             <div class="alert alert-danger mt-3" role="alert">

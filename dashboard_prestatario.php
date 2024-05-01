@@ -32,7 +32,7 @@ if (!isset($_SESSION['borrower_id'])) {
         <p>Aquí puedes ver información relacionada con tu cuenta y otras funcionalidades disponibles.</p>
         <div class="row mb-4">
             <div class="col-md-4">
-                <a href="prestamistaRegister.php" class="btn btn-primary btn-block">Solicitud de prestamos</a>
+                <a href="lista_presamos_prestatario.php" class="btn btn-primary btn-block">Solicitud de prestamos</a>
             </div>
             <div style="width: 100%; height: 60vh; background-color: grey;" class="mt-5">
 

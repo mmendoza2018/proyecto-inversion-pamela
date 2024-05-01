@@ -12,7 +12,7 @@ include('db.php');
 // Consultar los inversionistas registrados asociados al inversionista actual
 $query = "SELECT * FROM prestamista pre INNER JOIN distrito dis ON pre.district_id = dis.district_id ";
 $query .= "INNER JOIN departamento dep ON pre.department_id = dep.department_id ";
-$query .= "INNER JOIN provincia pro ON pre.province_id = pro.province_id";
+$query .= "INNER JOIN provincia pro ON pre.province_id = pro.province_id WHERE leader_id = ". $_SESSION['leader_id']."";
 
 $stmt = $conn->prepare($query);
 $stmt->execute();
@@ -42,18 +42,18 @@ $prestamistas = $result->fetch_all(MYSQLI_ASSOC);
 
 <body>
     <div class="container mt-4">
-        <h1>¡Bienvenido al Dashboard, Inversionista!</h1>
+        <h1>¡Bienvenido al Dashboard, jefe!</h1>
         <p>Aquí puedes ver información relacionada con tu cuenta y otras funcionalidades disponibles.</p>
         <div class="row mb-4">
             <div class="col-md-4">
-                <a href="jefePrestamistaRegister.php" class="btn btn-primary btn-block">Agregar jefe de prestamista</a>
+                <a href="jefePrestamistaRegister.php" class="btn btn-primary btn-block">Agregar prestamista</a>
             </div>
 
             <!-- Puedes agregar más opciones según las funcionalidades de tu sistema -->
         </div>
         <div class="row">
             <div class="col-md-12 center-table"> <!-- Utiliza la clase center-table para centrar la tabla -->
-                <h2>Inversionistas Registrados</h2>
+                <h2>prestamistas Registrados</h2>
                 <table class="table">
                     <thead>
                         <tr>
@@ -159,7 +159,7 @@ $prestamistas = $result->fetch_all(MYSQLI_ASSOC);
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerra</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-primary" onclick="actualizaPrestamista()">Guardar</button>
                 </div>
             </div>

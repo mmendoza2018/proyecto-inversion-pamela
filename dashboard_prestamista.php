@@ -12,7 +12,7 @@ include('db.php');
 // Consultar los inversionistas registrados asociados al inversionista actual
 $query = "SELECT * FROM prestatario pre INNER JOIN distrito dis ON pre.district_id = dis.district_id ";
 $query .= "INNER JOIN departamento dep ON pre.department_id = dep.department_id ";
-$query .= "INNER JOIN provincia pro ON pre.province_id = pro.province_id";
+$query .= "INNER JOIN provincia pro ON pre.province_id = pro.province_id WHERE lender_id = ". $_SESSION['lender_id']."";
 
 $stmt = $conn->prepare($query);
 $stmt->execute();
@@ -159,7 +159,7 @@ $prestatarios = $result->fetch_all(MYSQLI_ASSOC);
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerra</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-primary" onclick="actualizaPrestatario()">Guardar</button>
                 </div>
             </div>

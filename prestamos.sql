@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-05-2024 a las 07:32:38
+-- Tiempo de generación: 02-05-2024 a las 01:26:19
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 7.4.33
 
@@ -59,6 +59,34 @@ CREATE TABLE `departamento` (
 
 INSERT INTO `departamento` (`department_id`, `department_name`) VALUES
 (1, 'La Libertad');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `detalle_prestamo`
+--
+
+CREATE TABLE `detalle_prestamo` (
+  `det_id` int(11) NOT NULL,
+  `loan_id` int(11) NOT NULL,
+  `days` int(11) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `total` decimal(10,2) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `detalle_prestamo`
+--
+
+INSERT INTO `detalle_prestamo` (`det_id`, `loan_id`, `days`, `amount`, `total`) VALUES
+(1, 1, 15, '150.00', '154.11'),
+(2, 1, 20, '150.00', '155.49'),
+(3, 1, 25, '150.00', '156.86'),
+(4, 1, 15, '200.00', '205.49'),
+(5, 1, 20, '200.00', '207.32'),
+(6, 1, 25, '200.00', '209.15'),
+(7, 1, 30, '200.00', '210.98'),
+(8, 1, 30, '400.00', '421.96');
 
 -- --------------------------------------------------------
 
@@ -138,7 +166,8 @@ INSERT INTO `inversionista` (`investor_id`, `admin_id`, `district_id`, `province
 (2, 1, 1, 1, 1, 'inv', 'inv', 'inv2@example.com', 1),
 (3, 1, 54, 8, 1, 'fanab', 'Pa$$w0rd!', 'menalufy@mailinator.com', 1),
 (4, 1, 47, 6, 1, 'fysacyvu', 'Pa$$w0rd!', 'cytedebo@mailinator.com', 0),
-(5, 1, 29, 10, 1, 'mukaluxy', 'Pa$$w0rd!', 'bifimohaj@mailinator.com', 1);
+(5, 1, 29, 10, 1, 'mukaluxy', 'Pa$$w0rd!', 'bifimohaj@mailinator.com', 1),
+(6, 1, 37, 3, 1, 'inv2', 'inv2', 'quqerit@mailinator.com', 1);
 
 -- --------------------------------------------------------
 
@@ -168,7 +197,22 @@ INSERT INTO `jefe_prestamista` (`leader_id`, `investor_id`, `phone`, `dni`, `dis
 (1, 1, '', '', 0, 2, 1, 1, 'jefe', 'jefe', 'jefe1@example.com'),
 (2, 2, '', '', 35, 2, 1, 1, 'jefe', 'jefe2', 'jefe2@example.com'),
 (3, 1, '+1 (566) 111-8205', 'Autem sint', 35, 2, 1, 0, 'gedony', 'Pa$$w0rd!', 'tawydob@mailinator.com'),
-(4, 1, '+1 (322) 228-4968', 'Laboris pa', 59, 10, 1, 0, 'hiii', 'Pa$$w0rd!', 'quqerit@mailinator.com');
+(4, 1, '+1 (322) 228-4968', 'Laboris pa', 59, 10, 1, 0, 'hiii', 'Pa$$w0rd!', 'quqerit@mailinator.com'),
+(5, 2, '+1 (765) 393-6551', 'Ducimus re', 37, 3, 1, 1, 'jefe2', 'jefe2', 'qewuc@mailinator.com'),
+(6, 6, '+1 (822) 453-6526', 'Vel autem ', 35, 2, 1, 1, 'jefessss', 'Pa$$w0rd!', 'cataq@mailinator.com');
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `pagos_diarios`
+--
+
+CREATE TABLE `pagos_diarios` (
+  `pay_id` int(11) NOT NULL,
+  `borrower_det_id` int(11) NOT NULL,
+  `amount` decimal(10,2) NOT NULL,
+  `date` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- --------------------------------------------------------
 
@@ -195,10 +239,8 @@ CREATE TABLE `prestamista` (
 --
 
 INSERT INTO `prestamista` (`lender_id`, `leader_id`, `phone`, `dni`, `district_id`, `province_id`, `department_id`, `state`, `username`, `password`, `email`) VALUES
-(1, 1, '', '', 1, 1, 1, 1, 'prestamista', 'prestamista', 'prestamista1@example.com'),
-(2, 2, '', '', 1, 1, 1, 1, 'prestamista2', 'password2', 'prestamista2@example.com'),
-(3, 1, '+1 (627) 692-6578', 'Aspernatur molestiae', 38, 3, 1, 1, 'zubeq', 'Pa$$w0rd!', 'zebyxavuvy@mailinator.com'),
-(4, 1, '+1 (165) 419-4106', 'Et eiusmod ut animi', 59, 10, 1, 0, 'miguelxd', 'Pa$$w0rd!', 'jibudazymu@mailinator.com');
+(1, 1, 'treterter', '25427453', 1, 1, 1, 1, 'prestamista', 'prestamista', 'prestamista1@example.com'),
+(2, 2, '64564564', '6456456', 1, 1, 1, 1, 'prestamista2', 'password2', 'prestamista2@example.com');
 
 -- --------------------------------------------------------
 
@@ -208,20 +250,17 @@ INSERT INTO `prestamista` (`lender_id`, `leader_id`, `phone`, `dni`, `district_i
 
 CREATE TABLE `prestamo` (
   `loan_id` int(11) NOT NULL,
-  `borrower_id` int(11) DEFAULT NULL,
-  `loan_amount` decimal(10,2) DEFAULT NULL,
-  `loan_date` date DEFAULT NULL
+  `lender_id` int(11) DEFAULT NULL,
+  `date_register` datetime DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 --
 -- Volcado de datos para la tabla `prestamo`
 --
 
-INSERT INTO `prestamo` (`loan_id`, `borrower_id`, `loan_amount`, `loan_date`) VALUES
-(1, 1, '1500.00', '2024-04-20'),
-(2, 2, '2500.00', '2024-04-21'),
-(3, 1, '1800.00', '2024-04-22'),
-(4, 2, '3000.00', '2024-04-23');
+INSERT INTO `prestamo` (`loan_id`, `lender_id`, `date_register`) VALUES
+(1, 1, '2024-04-20 00:00:00'),
+(2, 2, '2024-04-21 00:00:00');
 
 -- --------------------------------------------------------
 
@@ -256,6 +295,43 @@ INSERT INTO `prestatario` (`borrower_id`, `lender_id`, `phone`, `dni`, `province
 (4, 1, '+1 (583) 964-2195', 'Inventore enim illum', 7, 1, 1, 'zuwivukuf', 'Pa$$w0rd!', 'gocakunov@mailinator.com', 49, NULL, NULL),
 (5, 1, '+1 (209) 995-1196', 'Aut dolore autem sed', 4, 1, 0, 'qevawi', 'Pa$$w0rd!', 'rohicevin@mailinator.com', 40, NULL, NULL),
 (6, 1, '+1 (408) 934-5855', 'Excepturi quis nesci', 1, 1, 1, 'prestatario', 'prestatario', 'digamehyzi@mailinator.com', 2, NULL, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- Estructura de tabla para la tabla `prestatario_prestamo`
+--
+
+CREATE TABLE `prestatario_prestamo` (
+  `bor_det_id` int(11) NOT NULL,
+  `borrower_id` int(11) NOT NULL,
+  `det_loan_id` int(11) NOT NULL,
+  `state` varchar(20) NOT NULL DEFAULT 'PENDIENTE',
+  `date_init` date NOT NULL,
+  `date_finish` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Volcado de datos para la tabla `prestatario_prestamo`
+--
+
+INSERT INTO `prestatario_prestamo` (`bor_det_id`, `borrower_id`, `det_loan_id`, `state`, `date_init`, `date_finish`) VALUES
+(1, 6, 6, 'PENDIENTE', '0000-00-00', '0000-00-00'),
+(2, 6, 6, 'PENDIENTE', '0000-00-00', '0000-00-00'),
+(3, 6, 6, 'PENDIENTE', '0000-00-00', '0000-00-00'),
+(4, 6, 6, 'PENDIENTE', '0000-00-00', '0000-00-00'),
+(5, 6, 4, 'PENDIENTE', '2024-05-01', '2024-05-15'),
+(6, 6, 4, 'PENDIENTE', '2024-05-01', '2024-05-15'),
+(7, 6, 4, 'PENDIENTE', '2024-05-01', '2024-05-15'),
+(8, 6, 4, 'PENDIENTE', '2024-05-01', '2024-05-15'),
+(9, 6, 5, 'PENDIENTE', '2024-05-17', '2024-06-05'),
+(10, 6, 5, 'PENDIENTE', '2024-05-17', '2024-06-05'),
+(11, 6, 6, 'PENDIENTE', '2024-05-31', '2024-06-24'),
+(12, 6, 6, 'PENDIENTE', '2024-05-31', '2024-06-24'),
+(13, 6, 8, 'PENDIENTE', '2024-05-09', '2024-06-07'),
+(14, 6, 6, 'PENDIENTE', '2024-05-02', '2024-05-26'),
+(15, 6, 6, 'PENDIENTE', '2024-05-02', '2024-05-26'),
+(16, 6, 1, 'PENDIENTE', '2024-05-11', '2024-05-25');
 
 -- --------------------------------------------------------
 
@@ -302,6 +378,13 @@ ALTER TABLE `departamento`
   ADD PRIMARY KEY (`department_id`);
 
 --
+-- Indices de la tabla `detalle_prestamo`
+--
+ALTER TABLE `detalle_prestamo`
+  ADD PRIMARY KEY (`det_id`),
+  ADD KEY `loan_id` (`loan_id`);
+
+--
 -- Indices de la tabla `distrito`
 --
 ALTER TABLE `distrito`
@@ -325,6 +408,13 @@ ALTER TABLE `jefe_prestamista`
   ADD KEY `investor_id` (`investor_id`);
 
 --
+-- Indices de la tabla `pagos_diarios`
+--
+ALTER TABLE `pagos_diarios`
+  ADD PRIMARY KEY (`pay_id`),
+  ADD KEY `borrower_det_id` (`borrower_det_id`);
+
+--
 -- Indices de la tabla `prestamista`
 --
 ALTER TABLE `prestamista`
@@ -335,8 +425,7 @@ ALTER TABLE `prestamista`
 -- Indices de la tabla `prestamo`
 --
 ALTER TABLE `prestamo`
-  ADD PRIMARY KEY (`loan_id`),
-  ADD KEY `borrower_id` (`borrower_id`);
+  ADD PRIMARY KEY (`loan_id`);
 
 --
 -- Indices de la tabla `prestatario`
@@ -345,6 +434,14 @@ ALTER TABLE `prestatario`
   ADD PRIMARY KEY (`borrower_id`),
   ADD KEY `lender_id` (`lender_id`),
   ADD KEY `district_id` (`district_id`);
+
+--
+-- Indices de la tabla `prestatario_prestamo`
+--
+ALTER TABLE `prestatario_prestamo`
+  ADD PRIMARY KEY (`bor_det_id`),
+  ADD KEY `borrower_id` (`borrower_id`),
+  ADD KEY `det_loan_id` (`det_loan_id`);
 
 --
 -- Indices de la tabla `provincia`
@@ -370,6 +467,12 @@ ALTER TABLE `departamento`
   MODIFY `department_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
+-- AUTO_INCREMENT de la tabla `detalle_prestamo`
+--
+ALTER TABLE `detalle_prestamo`
+  MODIFY `det_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
 -- AUTO_INCREMENT de la tabla `distrito`
 --
 ALTER TABLE `distrito`
@@ -379,13 +482,19 @@ ALTER TABLE `distrito`
 -- AUTO_INCREMENT de la tabla `inversionista`
 --
 ALTER TABLE `inversionista`
-  MODIFY `investor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `investor_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `jefe_prestamista`
 --
 ALTER TABLE `jefe_prestamista`
-  MODIFY `leader_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `leader_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `pagos_diarios`
+--
+ALTER TABLE `pagos_diarios`
+  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT de la tabla `prestamista`
@@ -404,6 +513,12 @@ ALTER TABLE `prestamo`
 --
 ALTER TABLE `prestatario`
   MODIFY `borrower_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+
+--
+-- AUTO_INCREMENT de la tabla `prestatario_prestamo`
+--
+ALTER TABLE `prestatario_prestamo`
+  MODIFY `bor_det_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT de la tabla `provincia`
@@ -432,12 +547,6 @@ ALTER TABLE `jefe_prestamista`
 --
 ALTER TABLE `prestamista`
   ADD CONSTRAINT `prestamista_ibfk_1` FOREIGN KEY (`leader_id`) REFERENCES `jefe_prestamista` (`leader_id`);
-
---
--- Filtros para la tabla `prestamo`
---
-ALTER TABLE `prestamo`
-  ADD CONSTRAINT `prestamo_ibfk_1` FOREIGN KEY (`borrower_id`) REFERENCES `prestatario` (`borrower_id`);
 
 --
 -- Filtros para la tabla `prestatario`

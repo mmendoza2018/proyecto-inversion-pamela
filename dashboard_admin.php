@@ -188,7 +188,7 @@ $inversionistas = $result->fetch_all(MYSQLI_ASSOC);
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerra</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-primary" onclick="actualizaInversionista()">Guardar</button>
                 </div>
             </div>

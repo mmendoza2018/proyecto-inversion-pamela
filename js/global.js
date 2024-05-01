@@ -287,7 +287,104 @@ async function eliminaPrestatario(id) {
     }
 }
 
-/* fin prestatarios */
+async function obtenerDetallePrestamo(element) {
+    try {
+        let idDetalle = element.dataset.id_detalle;
+        console.log('idDetalle :>> ', idDetalle);
+        const response = await fetch(`./get_detallePrestamo.php?id=${idDetalle}`);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+        const data = await response.json();
+        const d = document;
+        d.getElementById("amount").value = data.total;
+        d.getElementById("det_loan_id").value = data.det_id;
+        d.getElementById("days").value = data.days;
+        d.getElementById("date_init").value = "";
+        
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+
+function realizarOperaciones(element) {
+    let monto = document.getElementById("amount").value;
+    let dias = document.getElementById("days").value;
+    let fechaInicio = element.value;
+
+    let fechaSumada = sumarDias(fechaInicio, dias);
+    console.log('fechaSumada :>> ', fechaSumada);
+
+    let diasLaborales = contarDiasLaborables(fechaInicio, fechaSumada);
+    console.log('diasLaborales :>> ', diasLaborales);
+    let pagoDiario = monto / diasLaborales;
+    document.getElementById("date_finish").value = fechaSumada;
+    document.getElementById("days").value = dias;
+    document.getElementById("amoutUnique").value = pagoDiario;
+}
+
+function sumarDias(fechaInicial, dias) {
+    // Obtener la fecha del input
+    var fecha = new Date(fechaInicial);
+
+    // Calcular la nueva fecha sumando los días
+    var newDate = new Date(fecha.getTime() + dias * 24 * 60 * 60 * 1000);
+
+    // Convertir la nueva fecha a un formato legible
+    var formattedDate = newDate.getFullYear() + "-" +
+        ("0" + (newDate.getMonth() + 1)).slice(-2) + "-" +
+        ("0" + newDate.getDate()).slice(-2);
+
+    return formattedDate;
+}
+
+function contarDiasLaborables(fechaInicial, fechaFinal) {
+    var contador = 0;
+    var fechaActual = new Date(fechaInicial);
+    var fechaFinalComparacion = new Date(fechaFinal);
+
+    // Establecer la hora de fechaFinalComparacion a las 00:00:00 para incluir ese día en el cálculo
+    fechaFinalComparacion.setHours(0, 0, 0, 0);
+
+    // Iterar sobre cada día entre las fechas inicial y final, incluyendo la fecha final
+    while (fechaActual <= fechaFinalComparacion) {
+        // Verificar si el día actual es de lunes a viernes (de 1 a 5)
+        if (fechaActual.getDay() >= 1 && fechaActual.getDay() <= 5) {
+            contador++;
+        }
+        fechaActual.setDate(fechaActual.getDate() + 1); // Avanzar al siguiente día
+    }
+    return contador - 1;
+}
+
+async function solicitarPrestamo(element) {
+    try {
+        let formulario = document.getElementById("formAddSolicitarPrestamo");
+        let data = new FormData(formulario);
+        let options = {
+            method: "POST",
+            body: data
+        }
+
+        const response = await fetch(`./add_prestamo.php`, options);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+        const dataResponse = await response.json();
+        if (dataResponse) {
+            alert("agregado con exito");
+            $("#modalAddPrestamo").modal("hide");
+        } else {
+            alert("Error");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
 
 
 

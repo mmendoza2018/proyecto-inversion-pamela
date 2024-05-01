@@ -12,14 +12,14 @@ include('db.php');
 // Consultar los inversionistas registrados asociados al inversionista actual
 $query = "SELECT * FROM jefe_prestamista jp INNER JOIN distrito dis ON jp.district_id = dis.district_id ";
 $query .= "INNER JOIN departamento dep ON jp.department_id = dep.department_id ";
-$query .= "INNER JOIN provincia pro ON jp.province_id = pro.province_id";
+$query .= "INNER JOIN provincia pro ON jp.province_id = pro.province_id WHERE investor_id = ". $_SESSION['investor_id']."";
 
 $stmt = $conn->prepare($query);
 $stmt->execute();
 $result = $stmt->get_result();
 
 // Obtener los resultados en un array
-$inversionistas = $result->fetch_all(MYSQLI_ASSOC);
+$jefes = $result->fetch_all(MYSQLI_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -67,17 +67,17 @@ $inversionistas = $result->fetch_all(MYSQLI_ASSOC);
                         </tr>
                     </thead>
                     <tbody>
-                        <?php foreach ($inversionistas as $inversionista) : if($inversionista['state'] == 0) continue; ?>
+                        <?php foreach ($jefes as $jefe) : if($jefe['state'] == 0) continue; ?>
                             <tr>
-                                <td><?php echo $inversionista['leader_id']; ?></td>
-                                <td><?php echo $inversionista['username']; ?></td>
-                                <td><?php echo $inversionista['email']; ?></td>
-                                <td><?php echo $inversionista["district_name"]; ?></td>
-                                <td><?php echo $inversionista["province_name"]; ?></td>
-                                <td><?php echo $inversionista["department_name"]; ?></td>
+                                <td><?php echo $jefe['leader_id']; ?></td>
+                                <td><?php echo $jefe['username']; ?></td>
+                                <td><?php echo $jefe['email']; ?></td>
+                                <td><?php echo $jefe["district_name"]; ?></td>
+                                <td><?php echo $jefe["province_name"]; ?></td>
+                                <td><?php echo $jefe["department_name"]; ?></td>
                                 <td>
-                                    <a href="#" onclick="obtenerJefePrestamista('<?= $inversionista['leader_id']; ?>')" data-toggle="modal" data-target="#editarJefePrestamista" class="btn btn-primary btn-sm">Editar</a>
-                                    <a href="#" onclick="eliminaJefePrestamista('<?= $inversionista['leader_id']; ?>')" class="btn btn-danger btn-sm">Eliminar</a>
+                                    <a href="#" onclick="obtenerJefePrestamista('<?= $jefe['leader_id']; ?>')" data-toggle="modal" data-target="#editarJefePrestamista" class="btn btn-primary btn-sm">Editar</a>
+                                    <a href="#" onclick="eliminaJefePrestamista('<?= $jefe['leader_id']; ?>')" class="btn btn-danger btn-sm">Eliminar</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -159,7 +159,7 @@ $inversionistas = $result->fetch_all(MYSQLI_ASSOC);
                     </form>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerra</button>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
                     <button type="button" class="btn btn-primary" onclick="actualizaJefePrestamista()">Guardar</button>
                 </div>
             </div>
