@@ -47,6 +47,7 @@ $prestatarios = $result->fetch_all(MYSQLI_ASSOC);
         <div class="row mb-4">
             <div class="col-md-4">
                 <a href="prestamistaRegister.php" class="btn btn-primary btn-block">Agregar prestatarios</a>
+                <a href="solicitudes_prestamos.php" class="btn btn-primary btn-block">Ver solicitudes de prestamo</a>
             </div>
 
             <!-- Puedes agregar más opciones según las funcionalidades de tu sistema -->

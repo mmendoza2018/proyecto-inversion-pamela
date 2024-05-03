@@ -89,7 +89,8 @@ $solicitudes = $result->fetch_all(MYSQLI_ASSOC);
                                 <td><?php echo $solicitud['date_init']; ?></td>
                                 <td><?php echo $solicitud['date_finish']; ?></td>
                                 <td>
-                                    <a href="#" onclick="obtenerPrestatario('<?= $solicitud['borrower_id']; ?>')" data-toggle="modal" data-target="#editarPrestatario" class="btn btn-primary btn-sm">Editar</a>
+                                    <a href="#" onclick="obtenersolicitudPrestamo('<?= $solicitud['bor_det_id']; ?>')" 
+                                    data-toggle="modal" data-target="#modalAddPago" class="btn btn-primary btn-sm">Realizar pago</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>
@@ -101,6 +102,50 @@ $solicitudes = $result->fetch_all(MYSQLI_ASSOC);
 
         <a href="logout.php" class="btn btn-danger">Cerrar Sesión</a>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="modalAddPago" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Cambiar estado</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="formAddPago">
+                        <div class="form-group">
+                            <label for="username">Fecha inicio:</label>
+                            <input type="date" class="form-control" readonly name="date_init" id="date_init">
+                            <input type="hidden" name="bor_det_id" id="bor_det_id">
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Fecha final:</label>
+                            <input type="date" class="form-control" readonly name="date_finish" id="date_finish">
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Monto Total:</label>
+                            <input type="number" class="form-control" readonly name="amount" id="amount">
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Monto por dia:</label>
+                            <input type="number" class="form-control" readonly name="amount_pay" id="amount_pay">
+                        </div>
+                        <div class="form-group">
+                            <label for="username">Dia a pagar:</label>
+                            <input type="date" class="form-control" name="date_day" id="date_day">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-primary" onclick="solicitarPrestamo()">Guardar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- jQuery y Bootstrap JS (Necesario para que funcione Bootstrap) -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script>

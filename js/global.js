@@ -222,6 +222,56 @@ async function eliminaPrestamista(id) {
     }
 }
 
+function budsquedaSolisitudes() {
+    let formulario = document.getElementById("formBusqueda");
+    formulario.submit();
+} 
+
+function obtenerEstadoPrestamo(estado, id) {
+    document.getElementById("state").value = estado;
+    document.getElementById("bor_det_id").value = id;
+} 
+
+async function actualizaEstadoPrestamo() {
+    try {
+        let formulario = document.getElementById("formActEstadoPrestamo");
+        let data = new FormData(formulario);
+        let options = {
+            method: "POST",
+            body: data
+        }
+
+        const response = await fetch(`./cambiar_estado_prestamo.php`, options);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+        const dataResponse = await response.json();
+        console.log('dataResponse :>> ', dataResponse);
+        window.location.reload()
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function obtenerTablaPagos(id) {
+    try {
+        const response = await fetch(`./tabla_pagos_diarios.php?id=${id}`);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+        const tablaResponse = await response.text();
+        document.getElementById("llegaTablaPagos").innerHTML = tablaResponse
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+
+
+
+
 /* fin prestamista */
 
 
@@ -377,6 +427,81 @@ async function solicitarPrestamo(element) {
         if (dataResponse) {
             alert("agregado con exito");
             $("#modalAddPrestamo").modal("hide");
+        } else {
+            alert("Error");
+        }
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+async function obtenersolicitudPrestamo(id) {
+    try {
+        const response = await fetch(`./get_solicitud_prestatario.php?id=${id}`);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+        const data = await response.json();
+        const d = document;
+        
+        d.getElementById("date_init").value = data.date_init;
+        d.getElementById("date_finish").value = data.date_finish;
+        d.getElementById("amount").value = data.total;
+        d.getElementById("bor_det_id").value = data.bor_det_id;
+        d.getElementById("date_day").value = "";
+        
+
+        console.log('data.date_init :>> ', data.date_init);
+        console.log('data.date_finish :>> ', data.date_finish);
+        let diasLaborales = contarDiasLaborables(data.date_init, data.date_finish);
+        let pagoDiario = data.total / diasLaborales;
+        d.getElementById("amount_pay").value = pagoDiario;
+
+        console.log('data :>> ', data);
+
+    } catch (error) {
+        console.error('Error:', error);
+        throw error;
+    }
+}
+
+function fechaEnRango(fechaInicio, fechaFinal, fechaAComparar) {
+    // Convertir las fechas a objetos Date
+    var inicio = new Date(fechaInicio);
+    var fin = new Date(fechaFinal);
+    var comparar = new Date(fechaAComparar);
+
+    // Verificar si la fecha a comparar está dentro del rango
+    return comparar >= inicio && comparar <= fin;
+}
+
+async function solicitarPrestamo(element) {
+    try {
+
+        let fechaInicio = document.getElementById("date_init").value;
+        let fechaFinal = document.getElementById("date_finish").value;
+        let fechaSeleccionada = document.getElementById("date_day").value;
+
+        let fechaValida = fechaEnRango(fechaInicio, fechaFinal, fechaSeleccionada);
+        if (!fechaValida) {
+            return alert("la fecha no esta dentro del rango requerido");
+        }
+        let formulario = document.getElementById("formAddPago");
+        let data = new FormData(formulario);
+        let options = {
+            method: "POST",
+            body: data
+        }
+
+        const response = await fetch(`./add_pago.php`, options);
+        if (!response.ok) {
+            throw new Error('Error al obtener los datos');
+        }
+        const dataResponse = await response.json();
+        if (dataResponse) {
+            alert("agregado con exito");
+            $("#modalAddPago").modal("hide");
         } else {
             alert("Error");
         }
