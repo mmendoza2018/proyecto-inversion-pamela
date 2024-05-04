@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-05-2024 a las 01:26:19
+-- Tiempo de generación: 04-05-2024 a las 21:37:56
 -- Versión del servidor: 10.4.27-MariaDB
 -- Versión de PHP: 7.4.33
 
@@ -86,7 +86,9 @@ INSERT INTO `detalle_prestamo` (`det_id`, `loan_id`, `days`, `amount`, `total`) 
 (5, 1, 20, '200.00', '207.32'),
 (6, 1, 25, '200.00', '209.15'),
 (7, 1, 30, '200.00', '210.98'),
-(8, 1, 30, '400.00', '421.96');
+(8, 1, 30, '400.00', '421.96'),
+(9, 1, 25, '400.00', '418.30'),
+(10, 1, 30, '150.00', '157.23');
 
 -- --------------------------------------------------------
 
@@ -214,6 +216,18 @@ CREATE TABLE `pagos_diarios` (
   `date` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
+--
+-- Volcado de datos para la tabla `pagos_diarios`
+--
+
+INSERT INTO `pagos_diarios` (`pay_id`, `borrower_det_id`, `amount`, `date`) VALUES
+(1, 1, '21.30', '2024-05-03'),
+(2, 1, '17.00', '2024-05-22'),
+(3, 16, '17.12', '2024-05-15'),
+(4, 8, '22.83', '2024-05-04'),
+(5, 5, '22.83', '2024-05-01'),
+(6, 5, '22.83', '2024-05-02');
+
 -- --------------------------------------------------------
 
 --
@@ -239,8 +253,7 @@ CREATE TABLE `prestamista` (
 --
 
 INSERT INTO `prestamista` (`lender_id`, `leader_id`, `phone`, `dni`, `district_id`, `province_id`, `department_id`, `state`, `username`, `password`, `email`) VALUES
-(1, 1, 'treterter', '25427453', 1, 1, 1, 1, 'prestamista', 'prestamista', 'prestamista1@example.com'),
-(2, 2, '64564564', '6456456', 1, 1, 1, 1, 'prestamista2', 'password2', 'prestamista2@example.com');
+(1, 1, 'treterter', '25427453', 1, 1, 1, 1, 'prestamista', 'prestamista', 'prestamista1@example.com');
 
 -- --------------------------------------------------------
 
@@ -290,7 +303,6 @@ CREATE TABLE `prestatario` (
 
 INSERT INTO `prestatario` (`borrower_id`, `lender_id`, `phone`, `dni`, `province_id`, `department_id`, `state`, `username`, `password`, `email`, `district_id`, `loan_amount`, `loan_date`) VALUES
 (1, 1, '', '', 0, 0, 1, 'prestatario1', 'password1', 'prestatario1@example.com', 1, '1000.00', '2024-04-25'),
-(2, 2, '', '', 0, 0, 1, 'prestatario2', 'password2', 'prestatario2@example.com', 2, '2000.00', '2024-04-26'),
 (3, 1, '+1 (842) 883-7326', 'Eu quo non aspernatu', 2, 1, 1, 'holis', 'Pa$$w0rd!', 'sijaxd@mailinator.com', 34, NULL, NULL),
 (4, 1, '+1 (583) 964-2195', 'Inventore enim illum', 7, 1, 1, 'zuwivukuf', 'Pa$$w0rd!', 'gocakunov@mailinator.com', 49, NULL, NULL),
 (5, 1, '+1 (209) 995-1196', 'Aut dolore autem sed', 4, 1, 0, 'qevawi', 'Pa$$w0rd!', 'rohicevin@mailinator.com', 40, NULL, NULL),
@@ -320,7 +332,7 @@ INSERT INTO `prestatario_prestamo` (`bor_det_id`, `borrower_id`, `det_loan_id`, 
 (2, 6, 6, 'PENDIENTE', '0000-00-00', '0000-00-00'),
 (3, 6, 6, 'PENDIENTE', '0000-00-00', '0000-00-00'),
 (4, 6, 6, 'PENDIENTE', '0000-00-00', '0000-00-00'),
-(5, 6, 4, 'PENDIENTE', '2024-05-01', '2024-05-15'),
+(5, 6, 4, 'APROBADO', '2024-05-01', '2024-05-15'),
 (6, 6, 4, 'PENDIENTE', '2024-05-01', '2024-05-15'),
 (7, 6, 4, 'PENDIENTE', '2024-05-01', '2024-05-15'),
 (8, 6, 4, 'PENDIENTE', '2024-05-01', '2024-05-15'),
@@ -331,7 +343,7 @@ INSERT INTO `prestatario_prestamo` (`bor_det_id`, `borrower_id`, `det_loan_id`, 
 (13, 6, 8, 'PENDIENTE', '2024-05-09', '2024-06-07'),
 (14, 6, 6, 'PENDIENTE', '2024-05-02', '2024-05-26'),
 (15, 6, 6, 'PENDIENTE', '2024-05-02', '2024-05-26'),
-(16, 6, 1, 'PENDIENTE', '2024-05-11', '2024-05-25');
+(16, 6, 1, 'APROBADO', '2024-05-11', '2024-05-25');
 
 -- --------------------------------------------------------
 
@@ -470,7 +482,7 @@ ALTER TABLE `departamento`
 -- AUTO_INCREMENT de la tabla `detalle_prestamo`
 --
 ALTER TABLE `detalle_prestamo`
-  MODIFY `det_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `det_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT de la tabla `distrito`
@@ -494,7 +506,7 @@ ALTER TABLE `jefe_prestamista`
 -- AUTO_INCREMENT de la tabla `pagos_diarios`
 --
 ALTER TABLE `pagos_diarios`
-  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `pay_id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `prestamista`
