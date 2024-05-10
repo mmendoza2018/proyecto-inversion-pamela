@@ -140,7 +140,7 @@ $solicitudes = $result->fetch_all(MYSQLI_ASSOC);
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
-                    <button type="button" class="btn btn-primary" onclick="solicitarPrestamo()">Guardar</button>
+                    <button type="button" class="btn btn-primary" onclick="agregarPagoDiario()">Guardar</button>
                 </div>
             </div>
         </div>

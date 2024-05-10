@@ -351,6 +351,8 @@ async function obtenerDetallePrestamo(element) {
         d.getElementById("det_loan_id").value = data.det_id;
         d.getElementById("days").value = data.days;
         d.getElementById("date_init").value = "";
+        d.getElementById("amoutUnique").value = "";
+        
         
 
     } catch (error) {
@@ -476,11 +478,13 @@ function fechaEnRango(fechaInicio, fechaFinal, fechaAComparar) {
     return comparar >= inicio && comparar <= fin;
 }
 
-async function solicitarPrestamo(element) {
+async function agregarPagoDiario() {
     try {
 
         let fechaInicio = document.getElementById("date_init").value;
         let fechaFinal = document.getElementById("date_finish").value;
+        console.log('fechaFinal :>> ', fechaFinal);
+        console.log('document.getElementById("date_day") :>> ', document.getElementById("date_day"));
         let fechaSeleccionada = document.getElementById("date_day").value;
 
         let fechaValida = fechaEnRango(fechaInicio, fechaFinal, fechaSeleccionada);
